@@ -146,6 +146,7 @@ public class TaskServiceImpl implements TaskService {
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
             );
         } else {
+            task.setTaskState(TaskState.COMPLETED);
             emailService.sendHtmlMail(
                     users.getEmail(),
                     users.getUsername(),
