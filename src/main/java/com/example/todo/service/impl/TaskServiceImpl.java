@@ -5,6 +5,7 @@ import com.example.todo.dto.HttpApiResponse;
 import com.example.todo.dto.TaskDto;
 import com.example.todo.enums.TaskState;
 import com.example.todo.models.Task;
+import com.example.todo.models.Users;
 import com.example.todo.repository.TaskRepository;
 import com.example.todo.repository.UserRepository;
 import com.example.todo.service.EmailService;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +47,7 @@ public class TaskServiceImpl implements TaskService {
                     .build();
         }
 
+        Users users = userRepository.findByIdAndDeletedAtIsNull(dto.getUserId());
         Task task = taskMapper.toEntity(dto);
         task.setTaskState(TaskState.UNCOMPLETED);
         if (dto.getUserId() != null) {
@@ -53,7 +56,14 @@ public class TaskServiceImpl implements TaskService {
 
         var saved = taskRepository.save(task);
 
-        emailService.sendHtmlMail("", "xullas ukam gazini bos bundan buyogiga");
+        emailService.sendHtmlMail(
+                users.getEmail(),
+                users.getUsername(),
+                task.getName(),
+                task.getTaskState().toString(),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+        );
+
         return HttpApiResponse.<TaskDto>builder()
                 .success(true)
                 .content(taskMapper.toDto(saved))
@@ -125,14 +135,26 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository
                 .findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Task with id %s not found", id)));
-
+        Users users = userRepository.findByIdAndDeletedAtIsNull(task.getUsers().getId());
         if (task.getDeadline().isBefore(LocalDateTime.now())) {
             task.setTaskState(TaskState.LATE_COMPLETION);
-            emailService.sendHtmlMail("", "Ehh ukam taskni tugatalmading vaqtida");
+            emailService.sendHtmlMail(
+                    users.getEmail(),
+                    users.getUsername(),
+                    task.getName(),
+                    task.getTaskState().toString(),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+            );
         } else {
-            task.setTaskState(TaskState.COMPLETED);
-            emailService.sendHtmlMail("", "Qoyil taskni qoyilmaqom bajarding");
+            emailService.sendHtmlMail(
+                    users.getEmail(),
+                    users.getUsername(),
+                    task.getName(),
+                    task.getTaskState().toString(),
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+            );
         }
+
         task.setCompletedAt(LocalDateTime.now());
         Task saved = taskRepository.save(task);
 

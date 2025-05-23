@@ -16,6 +16,7 @@ public class TaskValidation {
     private final UserRepository userRepository;
 
     public Optional<ErrorDto> validateTask(TaskDto dto) {
+        System.out.println(dto.getUserId());
         boolean userExists = userRepository.existsByIdAndDeletedAtIsNull(dto.getUserId());
         if (!userExists) {
             return Optional.of(

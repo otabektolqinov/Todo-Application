@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Notification</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background-color: #f4f4f4;">
+<table role="presentation" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-collapse: collapse;">
+    <!-- Header -->
+    <tr>
+        <td style="background-color: #4a90e2; padding: 20px; text-align: center;">
+            <h1 style="color: #ffffff; font-size: 24px; margin: 0;">To-Do App Notification</h1>
+        </td>
+    </tr>
+    <!-- Content -->
+    <tr>
+        <td style="padding: 30px; color: #333333; font-size: 16px; line-height: 1.5;">
+            <p style="margin: 0 0 10px;">Dear <span th:text="${userName}"></span>,</p>
+            <p style="margin: 0 0 20px;">We have an update on your to-do list!</p>
+            <table role="presentation" width="100%" style="border-collapse: collapse; margin-bottom: 20px;">
+                <tr>
+                    <td style="padding: 10px; background-color: #f9f9f9; border: 1px solid #e0e0e0;">
+                        <strong>Task:</strong> <span th:text="${taskTitle}"></span>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; background-color: #f9f9f9; border: 1px solid #e0e0e0;">
+                        <strong>Status:</strong> <span th:text="${taskStatus}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; background-color: #f9f9f9; border: 1px solid #e0e0e0;">
+                        <strong>Date:</strong> <span th:text="${taskDate}"></span>
+                    </td>
+                </tr>
+            </table>
+            <p th:text="${taskStatusMessage}" style="margin: 0 0 20px;">
+            </p>
+            <p style="margin: 0;">Keep up the great work!</p>
+        </td>
+    </tr>
+    <!-- Footer -->
+    <tr>
+        <td style="background-color: #4a90e2; padding: 20px; text-align: center; color: #ffffff; font-size: 14px;">
+            <p style="margin: 0;">&copy; 2025 To-Do App. All rights reserved.</p>
+            <p style="margin: 5px 0 0;">
+                <a href="[AppLink]" style="color: #ffffff; text-decoration: none;">Visit To-Do App</a>
+            </p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
