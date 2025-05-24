@@ -5,6 +5,7 @@ import com.example.todo.dto.UserDto;
 import com.example.todo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -14,14 +15,16 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<HttpApiResponse<UserDto>> createUser(@RequestBody UserDto dto){
+        System.out.println(dto.getPassword());
         HttpApiResponse<UserDto> response = userService.createUser(dto);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
     @GetMapping
     public ResponseEntity<HttpApiResponse<UserDto>> getUserById(@RequestParam("id") Integer id){
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         HttpApiResponse<UserDto> response = userService.getUserById(id);
         return ResponseEntity.status(response.getStatus()).body(response);
     }

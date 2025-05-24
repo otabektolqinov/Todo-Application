@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@ToString
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,8 +22,10 @@ public class Users {
     private Integer id;
     private String username;
     private String email;
+    private String password;
     private Integer age;
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Task> tasks;
 
     @CreationTimestamp

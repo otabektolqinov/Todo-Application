@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,11 +18,13 @@ import org.springframework.stereotype.Component;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
     UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     @Override
     public HttpApiResponse<UserDto> createUser(UserDto dto) {
         Users user = userMapper.toEntity(dto);
+        user.setPassword(encoder.encode(user.getPassword()));
         Users saved = userRepository.save(user);
         return HttpApiResponse.<UserDto>builder()
                 .content(userMapper.toDto(saved))
